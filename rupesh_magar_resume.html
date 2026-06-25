@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rupesh Magar — Project Manager</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --navy:   #09142A;
+      --navy2:  #112240;
+      --teal:   #00D4AA;
+      --teal2:  #00a886;
+      --cream:  #F5F1EA;
+      --gray:   #8494A7;
+      --gold:   #E8A838;
+      --white:  #FFFFFF;
+      --text:   #CDD6E0;
+      --radius: 12px;
+      --trans:  0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--navy);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* ─── HEADER ─────────────────────────────────────── */
+    header {
+      background: var(--navy2);
+      border-bottom: 1px solid rgba(0,212,170,0.15);
+      padding: 48px 5vw 40px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 32px;
+      flex-wrap: wrap;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,212,170,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      line-height: 1.05;
+      letter-spacing: -1px;
+      color: var(--white);
+    }
+
+    .hero-name span {
+      color: var(--teal);
+    }
+
+    .hero-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 400;
+      font-size: 1.1rem;
+      color: var(--gray);
+      margin-top: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .hero-contact {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      text-align: right;
+      padding-top: 6px;
+    }
+
+    .hero-contact a {
+      color: var(--teal);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.2px;
+      transition: color var(--trans);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      justify-content: flex-end;
+    }
+
+    .hero-contact a:hover { color: var(--white); }
+
+    .hero-contact .icon {
+      width: 14px; height: 14px;
+      display: inline-block;
+      opacity: 0.7;
+    }
+
+    /* ─── LAYOUT ──────────────────────────────────────── */
+    .page-wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 5vw 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* ─── ACCORDION SECTION ───────────────────────────── */
+    .acc-block {
+      background: var(--navy2);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color var(--trans), box-shadow var(--trans);
+    }
+
+    .acc-block:hover {
+      border-color: rgba(0,212,170,0.25);
+    }
+
+    .acc-block.open {
+      border-color: rgba(0,212,170,0.35);
+      box-shadow: 0 0 0 1px rgba(0,212,170,0.1), 0 8px 40px rgba(0,0,0,0.3);
+    }
+
+    .acc-trigger {
+      width: 100%;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 22px 28px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      text-align: left;
+      transition: background var(--trans);
+    }
+
+    .acc-trigger:hover { background: rgba(0,212,170,0.04); }
+    .acc-block.open .acc-trigger { background: rgba(0,212,170,0.05); }
+
+    .acc-label {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--white);
+      letter-spacing: 0.3px;
+      flex: 1;
+    }
+
+    .acc-icon-wrap {
+      width: 34px; height: 34px;
+      border-radius: 8px;
+      background: rgba(0,212,170,0.1);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 1.1rem;
+    }
+
+    .acc-chevron {
+      width: 20px; height: 20px;
+      flex-shrink: 0;
+      color: var(--teal);
+      transition: transform var(--trans);
+    }
+
+    .acc-block.open .acc-chevron { transform: rotate(180deg); }
+
+    .acc-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .acc-inner {
+      padding: 0 28px 28px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 24px;
+    }
+
+    /* ─── SUMMARY ─────────────────────────────────────── */
+    .summary-text {
+      color: var(--text);
+      font-size: 0.95rem;
+      line-height: 1.8;
+      max-width: 720px;
+    }
+
+    /* ─── EXPERIENCE ──────────────────────────────────── */
+    .job {
+      padding-bottom: 28px;
+      margin-bottom: 28px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .job:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+
+    .job-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .job-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--white);
+    }
+
+    .job-company {
+      color: var(--teal);
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-top: 2px;
+    }
+
+    .job-meta {
+      text-align: right;
+    }
+
+    .job-date {
+      font-size: 0.8rem;
+      color: var(--gray);
+      font-weight: 500;
+      background: rgba(255,255,255,0.05);
+      border-radius: 6px;
+      padding: 3px 10px;
+      white-space: nowrap;
+    }
+
+    .job-location {
+      font-size: 0.78rem;
+      color: var(--gray);
+      margin-top: 4px;
+      text-align: right;
+    }
+
+    .job ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .job li {
+      font-size: 0.88rem;
+      color: var(--text);
+      line-height: 1.65;
+      padding-left: 18px;
+      position: relative;
+    }
+
+    .job li::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 9px;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--teal);
+      opacity: 0.7;
+    }
+
+    /* ─── EDUCATION & CERTS ───────────────────────────── */
+    .card-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+    }
+
+    .mini-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px;
+      padding: 18px 20px;
+      transition: border-color var(--trans), background var(--trans);
+    }
+
+    .mini-card:hover {
+      border-color: rgba(0,212,170,0.3);
+      background: rgba(0,212,170,0.04);
+    }
+
+    .mini-card-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .mini-card-sub {
+      font-size: 0.82rem;
+      color: var(--teal);
+      font-weight: 500;
+    }
+
+    .mini-card-detail {
+      font-size: 0.8rem;
+      color: var(--gray);
+      margin-top: 4px;
+    }
+
+    /* ─── AWARDS ──────────────────────────────────────── */
+    .award-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 16px;
+      border-radius: 10px;
+      background: rgba(232,168,56,0.04);
+      border: 1px solid rgba(232,168,56,0.12);
+      margin-bottom: 12px;
+      transition: border-color var(--trans), background var(--trans);
+    }
+
+    .award-item:last-child { margin-bottom: 0; }
+    .award-item:hover {
+      background: rgba(232,168,56,0.08);
+      border-color: rgba(232,168,56,0.3);
+    }
+
+    .award-icon { font-size: 1.5rem; flex-shrink: 0; }
+
+    .award-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--gold);
+    }
+
+    .award-sub {
+      font-size: 0.82rem;
+      color: var(--gray);
+      margin-top: 2px;
+    }
+
+    /* ─── SKILLS ──────────────────────────────────────── */
+    .skills-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .skill-tag {
+      background: rgba(0,212,170,0.08);
+      border: 1px solid rgba(0,212,170,0.2);
+      color: var(--teal);
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.2px;
+      transition: background var(--trans), border-color var(--trans), color var(--trans), transform var(--trans);
+      cursor: default;
+    }
+
+    .skill-tag:hover {
+      background: var(--teal);
+      color: var(--navy);
+      border-color: var(--teal);
+      transform: translateY(-1px);
+    }
+
+    /* ─── INVOLVEMENT ─────────────────────────────────── */
+    .involve-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .involve-role {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--white);
+    }
+
+    .involve-org {
+      color: var(--teal);
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    .involve-ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .involve-ul li {
+      font-size: 0.88rem;
+      color: var(--text);
+      line-height: 1.65;
+      padding-left: 18px;
+      position: relative;
+    }
+
+    .involve-ul li::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 9px;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      opacity: 0.8;
+    }
+
+    /* ─── SECTION COUNT BADGE ─────────────────────────── */
+    .acc-count {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--gray);
+      background: rgba(255,255,255,0.05);
+      padding: 2px 8px;
+      border-radius: 99px;
+      letter-spacing: 0.5px;
+    }
+
+    /* ─── EXPAND ALL ──────────────────────────────────── */
+    .top-controls {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 4px;
+      gap: 10px;
+    }
+
+    .ctrl-btn {
+      background: rgba(0,212,170,0.08);
+      border: 1px solid rgba(0,212,170,0.2);
+      color: var(--teal);
+      border-radius: 8px;
+      padding: 7px 16px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background var(--trans), color var(--trans);
+      letter-spacing: 0.3px;
+    }
+
+    .ctrl-btn:hover {
+      background: var(--teal);
+      color: var(--navy);
+    }
+
+    /* ─── FOOTER ──────────────────────────────────────── */
+    footer {
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--gray);
+      padding: 24px 5vw;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      letter-spacing: 0.5px;
+    }
+
+    /* ─── RESPONSIVE ──────────────────────────────────── */
+    @media (max-width: 600px) {
+      header { padding: 32px 20px 28px; }
+      .hero-contact { text-align: left; }
+      .hero-contact a { justify-content: flex-start; }
+      .acc-trigger { padding: 18px 20px; }
+      .acc-inner { padding: 0 20px 22px; padding-top: 20px; }
+      .job-meta { text-align: left; }
+      .page-wrap { padding: 28px 16px 60px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ HEADER ════════════════════════════════════════ -->
+<header>
+  <div>
+    <div class="hero-name">Rupesh <span>Magar</span></div>
+    <div class="hero-title">Global Project Manager &nbsp;·&nbsp; Digital Commerce &amp; Agile Delivery</div>
+  </div>
+  <div class="hero-contact">
+    <a href="mailto:rupeshmagar919@gmail.com">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
+      rupeshmagar919@gmail.com
+    </a>
+    <a href="tel:+917908479055">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 11.5 19.79 19.79 0 01.02 2.82 2 2 0 012 .66h3a2 2 0 012 1.72c.13 1 .37 1.97.72 2.9a2 2 0 01-.45 2.11L6 8.58a16 16 0 006.29 6.29l1.19-1.19a2 2 0 012.11-.45c.93.35 1.9.59 2.9.72a2 2 0 011.72 2z"/></svg>
+      +91 7908479055
+    </a>
+    <a href="https://linkedin.com/in/rupeshmagar" target="_blank" rel="noopener">
+      <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 110-4.14 2.07 2.07 0 010 4.14zM3.56 20.45h3.56V9H3.56v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0z"/></svg>
+      linkedin.com/in/rupeshmagar
+    </a>
+    <a href="#" style="color:var(--gray); font-size:0.78rem; pointer-events:none;">
+      📍 Bengaluru, Karnataka, India
+    </a>
+  </div>
+</header>
+
+<!-- ═══ MAIN ══════════════════════════════════════════ -->
+<main class="page-wrap">
+
+  <div class="top-controls">
+    <button class="ctrl-btn" onclick="toggleAll(true)">Expand All</button>
+    <button class="ctrl-btn" onclick="toggleAll(false)">Collapse All</button>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="acc-block open" data-section="summary">
+    <button class="acc-trigger" onclick="toggle(this)" aria-expanded="true">
+      <div class="acc-icon-wrap">💼</div>
+      <span class="acc-label">Summary</span>
+      <svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="acc-body" style="max-height:500px">
+      <div class="acc-inner">
+        <p class="summary-text">
+          Global Project Manager driving digital commerce initiatives through Agile execution, stakeholder alignment, data-driven decision making, and process optimisation. Experienced in Digital Engagement and Site Operations, driving cross-functional collaboration and digital transformation.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPERIENCE -->
+  <div class="acc-block open" data-section="experience">
+    <button class="acc-trigger" onclick="toggle(this)" aria-expanded="true">
+      <div class="acc-icon-wrap">🚀</div>
+      <span class="acc-label">Experience</span>
+      <span class="acc-count">4 roles</span>
+      <svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="acc-body" style="max-height:3000px">
+      <div class="acc-inner">
+
+        <!-- Job 1 -->
+        <div class="job">
+          <div class="job-header">
+            <div>
+              <div class="job-title">Project Manager</div>
+              <div class="job-company">Publicis Groupe</div>
+            </div>
+            <div class="job-meta">
+              <span class="job-date">Feb 2026 – Present</span>
+              <div class="job-location">Bengaluru</div>
+            </div>
+          </div>
+          <ul>
+            <li>Acting as the primary point of contact for a global FMCG client, translating business requirements into actionable briefs, managing localisation, adaptation, and creation of 100+ digital commerce assets to meet regional market requirements across various platforms.</li>
+            <li>Building delivery processes, workflows, and stakeholder expectations from 0→1, enabling structured execution of digital commerce projects across multiple regions, while managing project budget and cost estimates to ensure on-scope delivery.</li>
+          </ul>
+        </div>
+
+        <!-- Job 2 -->
+        <div class="job">
+          <div class="job-header">
+            <div>
+              <div class="job-title">Senior Producer, Digital Production</div>
+              <div class="job-company">Lowe's</div>
+            </div>
+            <div class="job-meta">
+              <span class="job-date">Jul 2025 – Jan 2026</span>
+              <div class="job-location">Bengaluru</div>
+            </div>
+          </div>
+          <ul>
+            <li>Led a GenAI-powered SEO transformation program, partnering with product, business, & operations teams to deliver 1,200+ optimized SEO copies, accelerating content velocity, strengthening mid-funnel performance, and boosting organic traffic to drive customer acquisition.</li>
+            <li>Built and scaled the video design capability within the site by defining workflows, standardizing processes, and partnering with technology teams to launch Lowe's first centralized video hub — improving customer engagement and supporting omnichannel content strategy.</li>
+            <li>Expanded Lowe's digital content library by 900+ blogs across categories within 11 months, in partnership with a third-party agency, strengthening SEO authority, increasing site traffic, and driving higher customer conversions.</li>
+          </ul>
+        </div>
+
+        <!-- Job 3 -->
+        <div class="job">
+          <div class="job-header">
+            <div>
+              <div class="job-title">Analyst, Digital Engagement</div>
+              <div class="job-company">Lowe's</div>
+            </div>
+            <div class="job-meta">
+              <span class="job-date">Oct 2023 – Jun 2025</span>
+              <div class="job-location">Bengaluru</div>
+            </div>
+          </div>
+          <ul>
+            <li>Directed 10+ enterprise-scale digital commerce initiatives (Black Friday, Category Reviews, Seasonal Refresh, Prime Combat), ensuring on-time delivery, cross-functional alignment, and seamless execution supporting revenue growth during peak retail cycles.</li>
+            <li>Redesigned workflows and implemented reporting automation (Excel & Jira) for better governance, unlocking 100+ annual productivity hours and providing leadership with real-time performance dashboards for faster, data-driven decision-making.</li>
+            <li>Partnered with 50+ Brand and Category Analysts to develop high-impact brand pages and optimize category page structures, driving personalized customer journeys, improving product discoverability, and strengthening digital merchandising effectiveness.</li>
+          </ul>
+        </div>
+
+        <!-- Job 4 -->
+        <div class="job">
+          <div class="job-header">
+            <div>
+              <div class="job-title">Associate, Website Operations</div>
+              <div class="job-company">Lowe's</div>
+            </div>
+            <div class="job-meta">
+              <span class="job-date">Jun 2022 – Sep 2023</span>
+              <div class="job-location">Bengaluru</div>
+            </div>
+          </div>
+          <ul>
+            <li>Delivered 1,000+ digital commerce projects spanning promotions, offers, events, and category management for Lowe's website, sustaining 90%+ customer satisfaction scores (CSAT) and strengthening customer experience across all digital channels.</li>
+            <li>Collaborated to transition critical workflows and manage resources of 80+ associates — 12,000+ operational hours — streamlining operations, resolving bottlenecks, and achieving a 9% efficiency uplift (88% → 97%), surpassing corporate targets.</li>
+            <li>Increased operational output by 25%+ through Kanban adoption for operations and design teams, surpassing SLA targets with accelerated project delivery, while building organizational capability by training teams on agile workflows and scalable best practices.</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- EDUCATION -->
+  <div class="acc-block" data-section="education">
+    <button class="acc-trigger" onclick="toggle(this)" aria-expanded="false">
+      <div class="acc-icon-wrap">🎓</div>
+      <span class="acc-label">Education</span>
+      <svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="card-row">
+          <div class="mini-card">
+            <div class="mini-card-title">Bachelor of Business Administration</div>
+            <div class="mini-card-sub">CHRIST (Deemed to be University)</div>
+            <div class="mini-card-detail">Bengaluru &nbsp;·&nbsp; 2022 &nbsp;·&nbsp; <strong style="color:var(--teal)">9.31 / 10 GPA</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CERTIFICATIONS -->
+  <div class="acc-block" data-section="certs">
+    <button class="acc-trigger" onclick="toggle(this)" aria-expanded="false">
+      <div class="acc-icon-wrap">📜</div>
+      <span class="acc-label">Certifications</span>
+      <span class="acc-count">2 certs</span>
+      <svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="card-row">
+          <div class="mini-card">
+            <div class="mini-card-title">Google Project Management</div>
+            <div class="mini-card-sub">Google</div>
+            <div class="mini-card-detail">2025</div>
+          </div>
+          <div class="mini-card">
+            <div class="mini-card-title">Fundamentals of Digital Marketing</div>
+            <div class="mini-card-sub">Coursera</div>
+            <div class="mini-card-detail">2023</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AWARDS -->
+  <div class="acc-block" data-section="awards">
+    <button class="acc-trigger" onclick="toggle(this)" aria-expanded="false">
+      <div class="acc-icon-wrap">🏆</div>
+      <span class="acc-label">Awards &amp; Honors</span>
+      <span class="acc-count">2 awards</span>
+      <svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="award-item">
+          <div class="award-icon">🥇</div>
+          <div>
+            <div class="award-title">Raise The Roof</div>
+            <div class="award-sub">Lowe's India · 2025 &nbsp;·&nbsp; Awarded annually to the single top-performing employee across the organisation</div>
+          </div>
+        </div>
+        <div class="award-item">
+          <div class="award-icon">⭐</div>
+          <div>
+            <div class="award-title">Individual Excellence ×3</div>
+            <div class="award-sub">Lowe's India · 2024 &nbsp;·&nbsp; Awarded for exemplary quarter-round performance across the business</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INVOLVEMENT -->
+  <div class="acc-block" data-section="involvement">
+    <button class="acc-trigger" onclick="toggle(this)" aria-expanded="false">
+      <div class="acc-icon-wrap">🤝</div>
+      <span class="acc-label">Community Involvement</span>
+      <svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="involve-header">
+          <div>
+            <div class="involve-role">Leader</div>
+            <div class="involve-org">CHRIST (Deemed To Be University) · Centre for Social Action</div>
+          </div>
+          <span class="job-date">May 2020 – May 2022</span>
+        </div>
+        <ul class="involve-ul">
+          <li>Mobilized 800+ volunteers to launch high-impact initiatives — a COVID-19 Taskforce to assist with resources during the pandemic, and educational focus groups delivering quarterly support to 25+ underprivileged children with education, nutrition, and welfare.</li>
+          <li>Designed inclusive flagship sports and cultural events for 300+ orphaned and specially abled children, while leading 200+ volunteers and partnering with leading NGOs to reach 1,000+ beneficiaries across Bangalore and different regions of Karnataka.</li>
+          <li>Secured ₹7 lakhs in sponsorships and boosted engagement by 40%, strengthening relations and ensuring long-term program sustainability.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SKILLS -->
+  <div class="acc-block" data-section="skills">
+    <button class="acc-trigger" onclick="toggle(this)" aria-expanded="false">
+      <div class="acc-icon-wrap">⚡</div>
+      <span class="acc-label">Skills</span>
+      <svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="skills-wrap">
+          <span class="skill-tag">Project Management</span>
+          <span class="skill-tag">Workflow & Process Improvement</span>
+          <span class="skill-tag">SOP Development</span>
+          <span class="skill-tag">Project Governance</span>
+          <span class="skill-tag">Resource Planning</span>
+          <span class="skill-tag">Stakeholder Management</span>
+          <span class="skill-tag">Business Reporting</span>
+          <span class="skill-tag">User Acceptance Testing</span>
+          <span class="skill-tag">Search Engine Optimization</span>
+          <span class="skill-tag">Root Cause Analysis</span>
+          <span class="skill-tag">Consumer Insights</span>
+          <span class="skill-tag">Gen-AI Automations</span>
+          <span class="skill-tag">Content Management System</span>
+          <span class="skill-tag">Digital Asset Management</span>
+          <span class="skill-tag">Digital Engagement</span>
+          <span class="skill-tag">Excel</span>
+          <span class="skill-tag">Power BI</span>
+          <span class="skill-tag">Jira & Confluence</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Rupesh Magar &nbsp;·&nbsp; rupeshmagar919@gmail.com &nbsp;·&nbsp; Bengaluru, India &nbsp;·&nbsp; © 2026
+</footer>
+
+<script>
+  function toggle(btn) {
+    const block = btn.closest('.acc-block');
+    const body  = block.querySelector('.acc-body');
+    const inner = block.querySelector('.acc-inner');
+    const isOpen = block.classList.contains('open');
+
+    if (isOpen) {
+      body.style.maxHeight = body.scrollHeight + 'px';
+      requestAnimationFrame(() => {
+        body.style.maxHeight = '0';
+      });
+      block.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+    } else {
+      block.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+      body.style.maxHeight = inner.scrollHeight + 48 + 'px';
+    }
+  }
+
+  function toggleAll(open) {
+    document.querySelectorAll('.acc-block').forEach(block => {
+      const btn  = block.querySelector('.acc-trigger');
+      const body = block.querySelector('.acc-body');
+      const inner = block.querySelector('.acc-inner');
+
+      if (open) {
+        block.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+        body.style.maxHeight = inner.scrollHeight + 48 + 'px';
+      } else {
+        block.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+        body.style.maxHeight = '0';
+      }
+    });
+  }
+
+  // Initialize open sections
+  document.querySelectorAll('.acc-block.open').forEach(block => {
+    const body  = block.querySelector('.acc-body');
+    const inner = block.querySelector('.acc-inner');
+    body.style.maxHeight = inner.scrollHeight + 48 + 'px';
+  });
+</script>
+
+</body>
+</html>
